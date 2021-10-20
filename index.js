@@ -6,9 +6,8 @@ connection.connect((error) => {
     choiceSelect();
 });
 
-// choiceSelect();
-function choiceSelect() {
-    inquirer
+async function choiceSelect() {
+    await inquirer
       .prompt([
         {
           type: 'list',
@@ -34,29 +33,96 @@ function choiceSelect() {
         } else if (selectChoice === 'Add Employee') {
           console.log('Add Employee')
           return addEmployee();
-        } else if (choices === 'Update Employee Role') {
+        } else if (selectChoice === 'Update Employee Role') {
           return updateEmployeeRole();
-        } else if (choices.selectChoice === 'View All Roles') {
+        } else if (selectChoice === 'View All Roles') {
           return viewAllRoles();
-        } else if (choices.selectChoice === 'Add Role') {
+        } else if (selectChoice === 'Add Role') {
           return addRole();
-        } else if (choices.selectChoice === 'View All Departments') {
+        } else if (selectChoice === 'View All Departments') {
           return viewAllDepts();
-        } else if (choices.selectChoice === 'Add Department') {
+        } else if (selectChoice === 'Add Department') {
           return addDept();
-        } else if (choices.selectChoice === 'Exit') {
+        } else if (selectChoice === 'Exit') {
           return done();
         }
       });
   }
 
-  const viewEmployees = () => {
-    connection.query('SELECT * FROM employee', function (err, result) {
-      console.table(result)
-      return done();
-    })
+const viewEmployees = () => {
+connection.query('SELECT * FROM employee', function (err, result) {
+    console.table(result)
+    return done();
+})
+}
+  
+async function addDept() {
+    const response = await inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "department_name",
+          message: "Enter the department name",
+        },
+      ])
+      .then((data) => {
+        console.log(data);
+        connection.query(
+          "INSERT INTO department (department_name) VALUES (?)",
+          data.department_name,
+          function (err, res) {
+            if (err) throw err;
+            console.log("Department added.");
+            viewAllDepts()
+          }
+        );
+      });
   }
 
-  function done(){
-    return choiceSelect();
-  }
+const viewAllDepts = () => {
+connection.query('SELECT * FROM department', function (err, result) {
+    console.table(result)
+    return done();
+})
+}
+
+async function addRole() {
+const response = await inquirer
+    .prompt([
+    {
+        type: "input",
+        name: "title",
+        message: "Enter employee's role",
+    },
+    {
+        type: "input",
+        name: "salary",
+        message: "Enter the employee's salary (numbers only)",
+    },
+    {
+        type: "input",
+        name: "department_id",
+        message: "Enter the employee's department",
+    },
+    ])
+    .then((data) => {
+    console.table(data);
+    connection.query(
+        "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [data.title, data.salary, data.department_id], function(err, res){
+        if (err) throw err;
+        viewAllRoles();
+        }
+    );
+    });
+}
+
+const viewAllRoles = () => {
+    connection.query('SELECT * FROM role', function (err, result) {
+        console.table(result)
+        return done();
+    })
+}
+
+function done(){
+return choiceSelect();
+}

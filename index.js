@@ -6,6 +6,7 @@ connection.connect((error) => {
     choiceSelect();
 });
 
+choiceSelect();
 function choiceSelect() {
     inquirer
       .prompt([

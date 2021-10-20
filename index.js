@@ -47,7 +47,7 @@ async function choiceSelect() {
           return done();
         }
       });
-  }
+}
 
 const viewEmployees = () => {
 connection.query('SELECT * FROM employee', function (err, result) {
@@ -77,7 +77,7 @@ async function addDept() {
           }
         );
       });
-  }
+}
 
 const viewAllDepts = () => {
 connection.query('SELECT * FROM department', function (err, result) {
@@ -121,6 +121,40 @@ const viewAllRoles = () => {
         console.table(result)
         return done();
     })
+}
+
+async function addEmployee() {
+    const response = await inquirer
+        .prompt([
+        {
+            type: "input",
+            name: "first_name",
+            message: "Enter the employee's first name",
+        },
+        {
+            type: "input",
+            name: "last_name",
+            message: "Enter the employee's last name",
+        },
+        {
+            type: "input",
+            name: "role_id",
+            message: "Enter the employee's role id#",
+        },
+        {
+            type: "input",
+            name: "manager_id",
+            message: "Enter the employee's manager's id#",
+        },
+        ])
+        .then((data) => {
+        console.log(data);
+        connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [data.first_name, data.last_name, data.role_id, data.manager_id], function (err, res) {
+            if (err) throw err;
+            console.log("Employee added.");
+            viewEmployees();
+        });
+        });
 }
 
 function done(){

@@ -12,9 +12,9 @@ CREATE TABLE role (
   department_id INTEGER NOT NULL
 );
 CREATE TABLE employee (
-  employee_id INTEGER NOT NULL,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
-  role_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  role_id INTEGER NOT NULL,
+  employee_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   manager_id INTEGER NOT NULL
 );

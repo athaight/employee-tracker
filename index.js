@@ -6,7 +6,7 @@ connection.connect((error) => {
     choiceSelect();
 });
 
-choiceSelect();
+// choiceSelect();
 function choiceSelect() {
     inquirer
       .prompt([
@@ -48,4 +48,15 @@ function choiceSelect() {
           return done();
         }
       });
+  }
+
+  const viewEmployees = () => {
+    connection.query('SELECT * FROM employee', function (err, result) {
+      console.table(result)
+      return done();
+    })
+  }
+
+  function done(){
+    return choiceSelect();
   }

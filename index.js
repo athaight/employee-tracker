@@ -55,6 +55,40 @@ connection.query('SELECT * FROM employee', function (err, result) {
     return done();
 })
 }
+
+async function addEmployee() {
+    const response = await inquirer
+        .prompt([
+        {
+            type: "input",
+            name: "first_name",
+            message: "Enter the employee's first name",
+        },
+        {
+            type: "input",
+            name: "last_name",
+            message: "Enter the employee's last name",
+        },
+        {
+            type: "input",
+            name: "role_id",
+            message: "Enter the employee's role id#",
+        },
+        {
+            type: "input",
+            name: "manager_id",
+            message: "Enter the employee's manager's id#",
+        },
+        ])
+        .then((data) => {
+        console.log(data);
+        connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [data.first_name, data.last_name, data.role_id, data.manager_id], function (err, res) {
+            if (err) throw err;
+            console.log("Employee added.");
+            viewEmployees();
+        });
+        });
+}
   
 async function addDept() {
     const response = await inquirer
@@ -92,17 +126,17 @@ const response = await inquirer
     {
         type: "input",
         name: "title",
-        message: "Enter employee's role",
+        message: "Enter role title",
     },
     {
         type: "input",
         name: "salary",
-        message: "Enter the employee's salary (numbers only)",
+        message: "Enter the salary for the role (numbers only)",
     },
     {
         type: "input",
         name: "department_id",
-        message: "Enter the employee's department",
+        message: "Enter the role's department id#",
     },
     ])
     .then((data) => {
@@ -123,39 +157,40 @@ const viewAllRoles = () => {
     })
 }
 
-async function addEmployee() {
-    const response = await inquirer
+async function updateEmployeeRole() {
+    connection.query("SELECT * FROM role", (err, data) => {
+      if (err) throw err;
+      const choices = data.map((role) => role.title);
+      console.table(data);
+  
+      inquirer
         .prompt([
-        {
+          {
+            type: "list",
+            name: "update",
+            message: "Select the role that you would like to change",
+            choices: choices,
+          },
+          {
             type: "input",
-            name: "first_name",
-            message: "Enter the employee's first name",
-        },
-        {
-            type: "input",
-            name: "last_name",
-            message: "Enter the employee's last name",
-        },
-        {
-            type: "input",
-            name: "role_id",
-            message: "Enter the employee's role id#",
-        },
-        {
-            type: "input",
-            name: "manager_id",
-            message: "Enter the employee's manager's id#",
-        },
+            name: "newRole",
+            message: "Enter the role's new name",
+          },
         ])
         .then((data) => {
-        console.log(data);
-        connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [data.first_name, data.last_name, data.role_id, data.manager_id], function (err, res) {
-            if (err) throw err;
-            console.log("Employee added.");
-            viewEmployees();
+          console.log(data.newRole);
+          connection.query(
+            `UPDATE role SET ? WHERE ?`,
+            [{ title: `${data.newRole}` }, { title: `${data.update}` }],
+            (err, res) => {
+              if (err) throw err;
+              choiceSelect();
+            }
+          );
         });
-        });
-}
+    });
+  }
+  
 
 function done(){
 return choiceSelect();

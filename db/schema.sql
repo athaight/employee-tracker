@@ -14,7 +14,6 @@ CREATE TABLE role (
 CREATE TABLE employee (
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
-  salary INT,
   employee_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   manager_id INTEGER NOT NULL,
   role_id INT

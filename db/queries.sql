@@ -1,4 +1,4 @@
-SELECT role_id
+SELECT role_id, salary
 FROM role
 INNER JOIN employee on employee.role_id = role.role_id;
 

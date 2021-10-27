@@ -57,7 +57,12 @@ npm run start
 ```
 ## DEMO:
 
+
+https://user-images.githubusercontent.com/69359454/139109469-1fac63fa-8604-4a43-bf45-aaa41d8f9461.mp4
+
+
 ### Screenshots:
+![seeds sql - employee-tracker - Visual Studio Code 10_27_2021 9_31_40 AM](https://user-images.githubusercontent.com/69359454/139108757-ba4fb695-e354-4371-a2cd-2eaf39a5a47d.png)
 
 ## Technologies:
 Node.js, Express, Inquirer, MySql2, Connect
